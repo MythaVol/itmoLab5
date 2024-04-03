@@ -1,12 +1,9 @@
 package MusicBands;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Objects;
 
-import java.beans.ConstructorProperties;
-
-@JsonSerialize
 public class MusicBand {
-    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private Long id = (long) hashCode(); //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
     private java.time.LocalDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
@@ -24,5 +21,25 @@ public class MusicBand {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MusicBand musicBand)) return false;
+        return numberOfParticipants == musicBand.numberOfParticipants && Objects.equals(id, musicBand.id) && Objects.equals(name, musicBand.name) && Objects.equals(coordinates, musicBand.coordinates) && Objects.equals(creationDate, musicBand.creationDate) && genre == musicBand.genre && Objects.equals(studio, musicBand.studio);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, coordinates, creationDate, numberOfParticipants, genre, studio);
     }
 }
