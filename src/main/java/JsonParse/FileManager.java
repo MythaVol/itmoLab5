@@ -7,5 +7,5 @@ import java.util.ArrayList;
 
 public interface FileManager {
     ArrayList<? extends  Object> read(File file);
-    void write(Object o, File file);
+    void write(ArrayList<? extends Object> list, File file);
 }

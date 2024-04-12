@@ -1,14 +1,18 @@
 package Commands;
 
-import CommandControl.CommandReceiver;
+import Collection.CollectionManager;
 
 public class AddIfMinCommand implements Command{
-    private CommandReceiver commandReceiver;
-    public AddIfMinCommand(CommandReceiver cm){
-        commandReceiver = cm;
+    private CollectionManager collectionManager;
+    public AddIfMinCommand(CollectionManager cm){
+        collectionManager = cm;
     }
     @Override
     public void execute() {
+    }
 
+    @Override
+    public boolean isParametrized() {
+        return false;
     }
 }

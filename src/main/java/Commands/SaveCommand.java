@@ -1,14 +1,24 @@
 package Commands;
 
-import CommandControl.CommandReceiver;
+import Collection.CollectionManager;
+import JsonParse.JsonManager;
+
+import java.io.File;
 
 public class SaveCommand implements Command{
-    private CommandReceiver commandReceiver;
-    public SaveCommand(CommandReceiver cm){
-        commandReceiver = cm;
+    private JsonManager jsonManager = new JsonManager();
+    private CollectionManager collectionManager;
+    public SaveCommand(CollectionManager cm){
+        collectionManager = cm;
     }
     @Override
     public void execute() {
+        collectionManager.sort();
+        jsonManager.write(collectionManager.getMusicBands(), new File(System.getenv("FILEPATH")));
+    }
 
+    @Override
+    public boolean isParametrized() {
+        return false;
     }
 }

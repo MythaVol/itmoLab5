@@ -1,14 +1,19 @@
 package Commands;
 
-import CommandControl.CommandReceiver;
+import Collection.CollectionManager;
 
 public class AddIfMaxCommand implements Command{
-    private CommandReceiver commandReceiver;
-    public AddIfMaxCommand(CommandReceiver cm){
-        commandReceiver = cm;
+    private CollectionManager cm;
+    public AddIfMaxCommand(CollectionManager cm){
+        this.cm = cm;
     }
     @Override
     public void execute() {
 
+    }
+
+    @Override
+    public boolean isParametrized() {
+        return false;
     }
 }
