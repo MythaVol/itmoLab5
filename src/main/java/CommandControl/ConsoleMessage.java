@@ -8,12 +8,12 @@ public class ConsoleMessage {
     public ConsoleMessage(InputStream is){
         inputStream = is;
     }
-    public  String ask(String message){
+    public String ask(String message){
         System.out.println(message);
         Scanner scanner = new Scanner(inputStream);
         return scanner.nextLine();
     }
-    public void message(String message){
+    public static void message(String message){
         System.out.println(message);
     }
 }

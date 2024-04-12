@@ -7,13 +7,16 @@ import MusicBands.Coordinates;
 import MusicBands.MusicBand;
 import MusicBands.Studio;
 
+import java.io.File;
+import java.io.InputStream;
+
 public class AddCommand implements Command{
     private Validator validator = new Validator();
     private CollectionManager collectionManager;
     private ConsoleMessage cm;
-    public AddCommand(CollectionManager collectionManager){
+    public AddCommand(CollectionManager collectionManager, InputStream is){
         this.collectionManager = collectionManager;
-        cm = new ConsoleMessage(System.in);
+        cm = new ConsoleMessage(is);
     }
     @Override
     public void execute() {
@@ -29,12 +32,12 @@ public class AddCommand implements Command{
             studio.setName(cm.ask("Введите имя студии"));
             studio.setAddress(cm.ask("Введите адрес студии"));
             musicBand.setStudio(studio);
-            musicBand.setGenre(validator.getGenre(cm.ask("Введите жанр")));
+            musicBand.setGenre(validator.getGenre(cm.ask("Введите жанр: hip-hop, jazz или soul")));
             musicBand.setId(collectionManager.getIdCounter());
             collectionManager.addNewBand(musicBand);
             collectionManager.sort();
         }catch (Exception e){
-            System.out.println("Данные введены неверно");
+            ConsoleMessage.message("Данные введены неверно");
         }
 
     }
@@ -46,6 +49,10 @@ public class AddCommand implements Command{
 
     public ConsoleMessage getCm() {
         return cm;
+    }
+
+    public Validator getValidator() {
+        return validator;
     }
 
     public void setCm(ConsoleMessage cm) {

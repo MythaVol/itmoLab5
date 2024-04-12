@@ -3,6 +3,7 @@ package Commands;
 import Collection.CollectionManager;
 import CommandControl.CommandController;
 import CommandControl.CommandExecutor;
+import CommandControl.ConsoleMessage;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -20,50 +21,54 @@ public class ExecuteScriptCommand implements CommandWithParametr{
     @Override
     public void execute() {
         File file = new File(parameter);
-        CommandController commandController = new CommandController(collectionManager){
-            @Override
-            public void run() {
-                try {
-                    Scanner scanner = new Scanner(file);
-                    CommandExecutor commandExecutor = new CommandExecutor();
-                    while (true) {
-                        System.out.println("Введите команду:");
-                        String command = scanner.nextLine();
-                        System.out.println(command);
-                        if (command.equals("exit")) {
-                            break;
-                        } else {
-                            String[] s = command.split(" ");
-                            if (s.length == 1) {
-                                try {
-                                    commandExecutor.executeCommand(getCommands().get(s[0]));
-                                } catch (Exception e) {
-                                    System.out.println("Команда введена неверно");
-                                }
-                            } else if (s.length == 2) {
-                                if (getCommands().get(s[0]).isParametrized()) {
-                                    if (s[0].equals("execute_script") && scriptNames.contains(s[1])) {
-                                        System.out.println("Нельзя запускать уже запущенные файлы");
-                                        continue;
-                                    }
+
+        try {
+            CommandController commandController = new CommandController(collectionManager, new FileInputStream(file)) {
+                @Override
+                public void run() {
+                    try {
+                        Scanner scanner = new Scanner(file);
+                        CommandExecutor commandExecutor = new CommandExecutor();
+                        while (true) {
+                            ConsoleMessage.message("Введите команду:");
+                            String command = scanner.nextLine();
+                            ConsoleMessage.message(command);
+                            if (command.equals("exit")) {
+                                break;
+                            } else {
+                                String[] s = command.split(" ");
+                                if (s.length == 1) {
                                     try {
-                                        commandExecutor.executeCommandWithParameter((CommandWithParametr) getCommands().get(s[0]), s[1]);
+                                        commandExecutor.executeCommand(getCommands().get(s[0]));
                                     } catch (Exception e) {
-                                        System.out.println("Команда введена неверно");
+                                        ConsoleMessage.message("Команда введена неверно");
                                     }
-                                } else System.out.println("У этой команды нет аргументов");
-                            } else System.out.println("Команда введена неверно");
+                                } else if (s.length == 2) {
+                                    if (getCommands().get(s[0]).isParametrized()) {
+                                        if (s[0].equals("execute_script") && scriptNames.contains(s[1])) {
+                                            ConsoleMessage.message("Нельзя запускать уже запущенные файлы");
+                                            continue;
+                                        }
+                                        try {
+                                            commandExecutor.executeCommandWithParameter((CommandWithParametr) getCommands().get(s[0]), s[1]);
+                                        } catch (Exception e) {
+                                            ConsoleMessage.message("Команда введена неверно");
+                                        }
+                                    } else ConsoleMessage.message("У этой команды нет аргументов");
+                                } else ConsoleMessage.message("Команда введена неверно");
+                            }
+
                         }
-
+                    } catch (FileNotFoundException e) {
+                        ConsoleMessage.message("File not found");
                     }
-                }catch (Exception e){
-                    System.out.println("File not found");
                 }
-            }
-        };
+            };
 
-        commandController.run();
-
+            commandController.run();
+        }catch (Exception e){
+            ConsoleMessage.message("File not found");
+        }
     }
 
     @Override

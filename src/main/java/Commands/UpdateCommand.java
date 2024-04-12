@@ -7,14 +7,16 @@ import MusicBands.Coordinates;
 import MusicBands.MusicBand;
 import MusicBands.Studio;
 
+import java.io.InputStream;
+
 public class UpdateCommand implements CommandWithParametr{
     private CollectionManager collectionManager;
     private String parameter;
     private ConsoleMessage cm;
     private Validator validator = new Validator();
-    public UpdateCommand(CollectionManager cm){
+    public UpdateCommand(CollectionManager cm, InputStream is){
         collectionManager= cm;
-        this.cm = new ConsoleMessage(System.in);
+        this.cm = new ConsoleMessage(is);
     }
     public void setParameter(String parameter){
         this.parameter = parameter;

@@ -1,8 +1,10 @@
 package Commands;
 
 import Collection.CollectionManager;
+import MusicBands.MusicBand;
 
 public class FilterStartsWithNameCommand implements CommandWithParametr{
+    private String parameter;
     private CollectionManager collectionManager;
 
     public FilterStartsWithNameCommand(CollectionManager cm){
@@ -10,7 +12,11 @@ public class FilterStartsWithNameCommand implements CommandWithParametr{
     }
     @Override
     public void execute() {
-
+        for(MusicBand musicBand: collectionManager.getMusicBands()){
+            if(musicBand.getName().startsWith(parameter)){
+                System.out.println(musicBand);
+            }
+        }
     }
 
     @Override
@@ -20,6 +26,6 @@ public class FilterStartsWithNameCommand implements CommandWithParametr{
 
     @Override
     public void setParameter(String parameter) {
-
+        this.parameter = parameter;
     }
 }
