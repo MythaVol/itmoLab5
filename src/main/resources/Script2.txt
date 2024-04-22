@@ -1,0 +1,5 @@
+info
+execute_script src\main\resources\Script2.txt
+execute_script src\main\resources\Script3.txt
+info
+exit

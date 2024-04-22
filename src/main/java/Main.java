@@ -6,5 +6,6 @@ public class Main {
         CollectionManager cm = new CollectionManager();
         CommandController commandController = new CommandController(cm, System.in);
         commandController.run();
+
     }
 }

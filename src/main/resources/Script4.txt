@@ -1,0 +1,3 @@
+execute_script src\main\resources\Script2.txt
+info
+exit

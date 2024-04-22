@@ -1,5 +1,6 @@
 package Collection;
 
+import CommandControl.ConsoleMessage;
 import JsonParse.JsonManager;
 import MusicBands.MusicBand;
 
@@ -9,11 +10,16 @@ import java.util.*;
 
 public class CollectionManager {
     private final JsonManager jsonManager = new JsonManager();
-    private final ArrayList<MusicBand> musicBands = new ArrayList<>(jsonManager.read(new File(System.getenv("FILEPATH"))));
+    private final ArrayList<MusicBand> musicBands = new ArrayList<>();
     private long idCounter;
     private LocalDateTime initDate;
     public CollectionManager(){
         initDate = LocalDateTime.now();
+        try {
+            musicBands.addAll(jsonManager.read(new File(System.getenv("FILEPATH"))));
+        } catch (Exception e) {
+            ConsoleMessage.message(e.getMessage());
+        }
         if(musicBands.isEmpty())
             idCounter = 1;
         else {

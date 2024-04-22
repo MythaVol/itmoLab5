@@ -1,0 +1,4 @@
+show
+execute_script src\main\resources\Script4.txt
+info
+exit

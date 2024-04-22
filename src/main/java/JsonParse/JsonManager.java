@@ -13,18 +13,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class JsonManager implements FileManager {
-    public ArrayList<MusicBand> read(File file) {
+    public ArrayList<MusicBand> read(File file) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
         objectMapper.setDateFormat(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"));
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         ArrayList<MusicBand> musicBands;
         try {
+
             FileReader fl = new FileReader(file);
-            musicBands = objectMapper.readValue(fl, new TypeReference<ArrayList<MusicBand>>(){});
-            fl.close();
+            try {
+                musicBands = objectMapper.readValue(fl, new TypeReference<ArrayList<MusicBand>>(){});
+                fl.close();
+
+            }catch (Exception e){
+                throw new Exception("Целостность файла нарушена, исправьте файл, либо продолжите без чтения из файла");
+            }
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new Exception(e);
         }
         return musicBands;
     }

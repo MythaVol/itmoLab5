@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class ExecuteScriptCommand implements CommandWithParametr{
     private CollectionManager collectionManager;
-    private ArrayList<String> scriptNames = new ArrayList<>();
+    private static ArrayList<String> scriptNames = new ArrayList<>();
     private String parameter;
 
     public ExecuteScriptCommand(CollectionManager collectionManager) {
@@ -21,7 +21,7 @@ public class ExecuteScriptCommand implements CommandWithParametr{
     @Override
     public void execute() {
         File file = new File(parameter);
-
+        ExecuteScriptCommand.getScriptNames().add(parameter);
         try {
             CommandController commandController = new CommandController(collectionManager, new FileInputStream(file)) {
                 @Override
@@ -45,9 +45,12 @@ public class ExecuteScriptCommand implements CommandWithParametr{
                                     }
                                 } else if (s.length == 2) {
                                     if (getCommands().get(s[0]).isParametrized()) {
-                                        if (s[0].equals("execute_script") && scriptNames.contains(s[1])) {
-                                            ConsoleMessage.message("Нельзя запускать уже запущенные файлы");
-                                            continue;
+                                        if (s[0].equals("execute_script")) {
+                                            if(ExecuteScriptCommand.getScriptNames().contains(s[1])) {
+                                                ConsoleMessage.message("Нельзя запускать уже запущенные файлы");
+                                                continue;
+                                            }
+                                            ExecuteScriptCommand.getScriptNames().add(s[1]);
                                         }
                                         try {
                                             commandExecutor.executeCommandWithParameter((CommandWithParametr) getCommands().get(s[0]), s[1]);
@@ -66,9 +69,15 @@ public class ExecuteScriptCommand implements CommandWithParametr{
             };
 
             commandController.run();
+
         }catch (Exception e){
             ConsoleMessage.message("File not found");
         }
+        scriptNames.clear();
+    }
+
+    public static ArrayList<String> getScriptNames() {
+        return scriptNames;
     }
 
     @Override
